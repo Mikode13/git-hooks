@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  HUSKY: 0
+
+jobs:
+  verify:
+    name: Node.js ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.17.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run check
+      - run: pnpm test
+      - run: pnpm run build
+      - if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: node bin/mikode-git-hooks.mjs lint-title
+      - if: github.event_name == 'pull_request'
+        run: node bin/mikode-git-hooks.mjs lint-branch "$GITHUB_HEAD_REF"
+      - if: matrix.node-version == 24
+        run: pnpm run audit:prod
+      - if: matrix.node-version == 24
+        run: pnpm run pack:check
