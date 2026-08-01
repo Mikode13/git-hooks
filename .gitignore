@@ -7,3 +7,4 @@ coverage/
 *.swp
 *.swo
 *.tgz
+.claude/settings.local.json
