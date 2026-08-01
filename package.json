@@ -31,11 +31,10 @@
 		"access": "public"
 	},
 	"scripts": {
-		"preinstall": "npx only-allow pnpm",
-		"prepare": "node bin/mikode-git-hooks.mjs install",
+		"prepare": "node scripts/verify-pnpm.mjs && node bin/mikode-git-hooks.mjs install",
 		"prepack": "pnpm run build",
 		"build": "tsc -p tsconfig.build.json",
-		"typecheck": "tsc --noEmit && node --check bin/mikode-git-hooks.mjs && node --check eslint.config.js && node --check prettier.config.mjs",
+		"typecheck": "tsc --noEmit && node --check bin/mikode-git-hooks.mjs && node --check scripts/verify-pnpm.mjs && node --check eslint.config.js && node --check prettier.config.mjs",
 		"format": "prettier . --write",
 		"format:check": "prettier . --check",
 		"lint": "eslint . --max-warnings 0",
