@@ -3,9 +3,11 @@
 Shared Git hooks, Conventional Commit validation, and workflow tooling for MiKode
 repositories.
 
-> **Status:** Experimental. This package implements proposed ADR 0008 and its draft Git
-> workflow standard. The API may change before the decision is accepted and before
-> version `1.0.0`.
+> **Status:** Stable. This package implements
+> [ADR 0008](https://github.com/Mikode13/engineering/blob/main/adr/0008-use-conventional-commits-and-squash-merges.md),
+> which is accepted, and the
+> [git workflow standard](https://github.com/Mikode13/engineering/blob/main/standards/git-workflow.md),
+> which is active.
 
 ## What it provides
 
@@ -119,8 +121,12 @@ automatically from `main`. The npm registry, Git tags, and GitHub Releases are t
 authoritative history; the `version` field in this repository stays at
 `0.0.0-development` and is never committed with a real version.
 
-The source of truth for the proposed workflow is
-[ADR 0008](https://github.com/mikode13/engineering/blob/45cd253/adr/0008-use-conventional-commits-and-squash-merges.md).
+The source of truth for the workflow this package enforces is the active
+[git workflow standard](https://github.com/Mikode13/engineering/blob/main/standards/git-workflow.md),
+accepted in
+[ADR 0008](https://github.com/Mikode13/engineering/blob/main/adr/0008-use-conventional-commits-and-squash-merges.md).
+Both links track `main` rather than a pinned commit, so they follow the policy this package
+implements rather than freezing at the revision it was written against.
 
 ## License
 
