@@ -1,43 +1,27 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
 
-env:
-  HUSKY: 0
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  verify:
-    name: Node.js ${{ matrix.node-version }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [22, 24]
-    steps:
-      - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v6
-        with:
-          version: 11.17.0
-      - uses: actions/setup-node@v6
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run check
-      - run: pnpm test
-      - run: pnpm run build
-      - if: github.event_name == 'pull_request'
-        env:
-          PR_TITLE: ${{ github.event.pull_request.title }}
-        run: node bin/mikode-git-hooks.mjs lint-title
-      - if: github.event_name == 'pull_request'
-        run: node bin/mikode-git-hooks.mjs lint-branch "$GITHUB_HEAD_REF"
-      - if: matrix.node-version == 24
-        run: pnpm run audit:prod
-      - if: matrix.node-version == 24
-        run: pnpm run pack:check
+  ci:
+    name: CI
+    # MiKode CI v2.0.0 (capability-composed)
+    uses: Mikode13/.github/.github/workflows/ci.yml@813d80713d5aa375023421674719267028aa01e5
+    with:
+      source: true
+      tests: true
+      build: true
+      package: true

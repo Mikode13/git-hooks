@@ -2,8 +2,7 @@
 	"extends": "@mikode13/tsconfig/node",
 	"compilerOptions": {
 		"noEmit": true,
-		"rootDir": ".",
 		"types": ["node"]
 	},
-	"include": ["src", "vitest.config.ts"]
+	"include": ["**/*.ts", "../src/**/*.ts"]
 }

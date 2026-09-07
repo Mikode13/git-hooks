@@ -1,12 +1,12 @@
 {
 	"name": "@mikode13/git-hooks",
-	"version": "0.1.0",
+	"version": "0.0.0-development",
 	"description": "Shared Git hooks, Conventional Commit validation, and workflow tooling for MiKode repositories.",
 	"type": "module",
 	"license": "SEE LICENSE IN LICENSE",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/mikode13/git-hooks.git"
+		"url": "git+https://github.com/Mikode13/git-hooks.git"
 	},
 	"engines": {
 		"node": "^22.13.0 || ^24.0.0"
@@ -31,18 +31,21 @@
 		"access": "public"
 	},
 	"scripts": {
-		"prepare": "node scripts/verify-pnpm.mjs && node bin/mikode-git-hooks.mjs install",
+		"prepare": "node bin/mikode-git-hooks.mjs install",
 		"prepack": "pnpm run build",
-		"build": "tsc -p tsconfig.build.json",
-		"typecheck": "tsc --noEmit && node --check bin/mikode-git-hooks.mjs && node --check scripts/verify-pnpm.mjs && node --check eslint.config.js && node --check prettier.config.mjs",
+		"build": "node scripts/clean-dist.mjs && tsc -p tsconfig.build.json",
 		"format": "prettier . --write",
 		"format:check": "prettier . --check",
 		"lint": "eslint . --max-warnings 0",
 		"lint:fix": "eslint . --fix",
-		"test": "tsx --test test/*.test.ts",
+		"typecheck": "tsc --noEmit && tsc --noEmit -p tests && node --check bin/mikode-git-hooks.mjs && node --check eslint.config.js && node --check prettier.config.mjs",
+		"test": "pnpm run test:unit",
+		"test:unit": "vitest run --project unit",
+		"test:unit:watch": "vitest --project unit",
+		"test:coverage": "vitest run --coverage",
 		"check": "pnpm run format:check && pnpm run lint && pnpm run typecheck",
 		"audit:prod": "pnpm audit --prod",
-		"pack:check": "pnpm pack --dry-run"
+		"pack:check": "pnpm run build && node scripts/pack-check.mjs"
 	},
 	"keywords": [
 		"commitlint",
@@ -61,9 +64,10 @@
 		"@mikode13/code-style": "0.1.0",
 		"@mikode13/tsconfig": "0.1.0",
 		"@types/node": "24.13.3",
+		"@vitest/coverage-v8": "4.1.10",
 		"eslint": "10.8.0",
 		"prettier": "3.9.6",
-		"tsx": "4.23.1",
-		"typescript": "6.0.3"
+		"typescript": "6.0.3",
+		"vitest": "4.1.10"
 	}
 }

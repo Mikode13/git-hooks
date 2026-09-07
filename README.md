@@ -97,17 +97,27 @@ Local hooks can be bypassed, so repositories must also:
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm run check
-pnpm test
-pnpm run build
-pnpm run audit:prod
-pnpm run pack:check
+pnpm run check       # prettier --check, eslint --max-warnings 0, tsc --noEmit
+pnpm test            # unit tests for title and branch validation
+pnpm run build       # removes dist, then compiles
+pnpm run pack:check  # builds and asserts the exact published file set
+pnpm run audit:prod  # production dependency audit
 ```
+
+`pre-push` runs `pnpm run check && pnpm test`. CI repeats both and adds `build` and
+`pack:check`.
 
 This implementation repository cannot consume its own unpublished package during
 bootstrap. Its project-owned `prepare` script therefore invokes the tracked CLI entry
 point with Node. Published consumers use `mikode-git-hooks install` as documented above;
 the package never installs hooks implicitly from a dependency directory.
+
+## Releases
+
+Versions are derived from Conventional Commit titles by `semantic-release` and published
+automatically from `main`. The npm registry, Git tags, and GitHub Releases are the
+authoritative history; the `version` field in this repository stays at
+`0.0.0-development` and is never committed with a real version.
 
 The source of truth for the proposed workflow is
 [ADR 0008](https://github.com/mikode13/engineering/blob/45cd253/adr/0008-use-conventional-commits-and-squash-merges.md).
