@@ -100,7 +100,7 @@ Local hooks can be bypassed, so repositories must also:
 ```sh
 pnpm install --frozen-lockfile
 pnpm run check       # prettier --check, eslint --max-warnings 0, tsc --noEmit
-pnpm test            # unit tests for title and branch validation
+pnpm test            # unit and integration tests for the CLI and validation rules
 pnpm run build       # removes dist, then compiles
 pnpm run pack:check  # builds and asserts the exact published file set
 pnpm run audit:prod  # production dependency audit
