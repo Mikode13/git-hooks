@@ -9,6 +9,12 @@ const validTitles = [
 	'feat(api)!: remove the legacy endpoint',
 ];
 
+const ignoredTitles = [
+	'v1.2.3',
+	"Merge branch 'main' into feature",
+	'Revert "some change"',
+];
+
 const invalidTitles = [
 	'Add passwordless login',
 	'feature: add passwordless login',
@@ -25,6 +31,13 @@ describe('pull request titles', () => {
 	});
 
 	it.each(invalidTitles)('rejects %j', async title => {
+		const result = await validatePullRequestTitle(title);
+
+		expect(result.valid).toBe(false);
+		expect(result.errors.length).toBeGreaterThan(0);
+	});
+
+	it.each(ignoredTitles)('rejects a default-ignored title %j', async title => {
 		const result = await validatePullRequestTitle(title);
 
 		expect(result.valid).toBe(false);

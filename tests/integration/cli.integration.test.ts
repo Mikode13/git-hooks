@@ -112,6 +112,17 @@ describe('lint-title', () => {
 			run(['lint-title'], { input: 'refactor(config): remove duplicate defaults' }).status,
 		).toBe(0);
 	});
+
+	it.each([
+		'v1.2.3',
+		"Merge branch 'main' into feature",
+		'Revert "some change"',
+	])('rejects a default-ignored title from stdin: %j', title => {
+		const result = run(['lint-title'], { input: title });
+
+		expect(result.status).toBe(1);
+		expect(result.stderr).not.toBe('');
+	});
 });
 
 describe('lint-branch', () => {
