@@ -29,7 +29,10 @@ export interface TitleValidationResult {
 export async function validatePullRequestTitle(title: string): Promise<TitleValidationResult> {
 	const config = await load(COMMITLINT_SEED, { cwd: PACKAGE_ROOT });
 	const parserOptions = config.parserPreset?.parserOpts as LintOptions['parserOpts'];
-	const lintOptions: LintOptions = parserOptions === undefined ? {} : { parserOpts: parserOptions };
+	const lintOptions: LintOptions = {
+		defaultIgnores: false,
+		...(parserOptions === undefined ? {} : { parserOpts: parserOptions }),
+	};
 	const report = await lint(title.trim(), config.rules, lintOptions);
 
 	return {
